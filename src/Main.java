@@ -4,11 +4,20 @@ public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
-        System.out.print("Enter the unit you want to convert from (feet, pounds, or Fahrenheit): ");
-        String fromUnit = scanner.nextLine();
+        String fromUnit;
+        String toUnit;
 
-        System.out.print("Enter the unit you want to convert to (meters, kilograms, or Celsius): ");
-        String toUnit = scanner.nextLine();
+        // Prompt for 'from' unit until valid input is provided
+        do {
+            System.out.print("Enter the unit you want to convert from (feet, pounds, or Fahrenheit): ");
+            fromUnit = scanner.nextLine();
+        } while (!isValidFromUnit(fromUnit));
+
+        // Prompt for 'to' unit until valid input is provided
+        do {
+            System.out.print("Enter the unit you want to convert to (meters, kilograms, or Celsius): ");
+            toUnit = scanner.nextLine();
+        } while (!isValidToUnit(toUnit, fromUnit));
 
         System.out.print("Enter the quantity to be converted: ");
         double quantity = scanner.nextDouble();
@@ -21,12 +30,24 @@ public class Main {
             result = poundsToKilograms(quantity);
         } else if (fromUnit.equalsIgnoreCase("fahrenheit") && toUnit.equalsIgnoreCase("celsius")) {
             result = fahrenheitToCelsius(quantity);
-        } else {
-            System.out.println("Invalid conversion units.");
-            return;
         }
 
         System.out.println("Result: " + result);
+    }
+
+    public static boolean isValidFromUnit(String unit) {
+        return unit.equalsIgnoreCase("feet") || unit.equalsIgnoreCase("pounds") || unit.equalsIgnoreCase("fahrenheit");
+    }
+
+    public static boolean isValidToUnit(String unit, String fromUnit) {
+        if (fromUnit.equalsIgnoreCase("feet")) {
+            return unit.equalsIgnoreCase("meters");
+        } else if (fromUnit.equalsIgnoreCase("pounds")) {
+            return unit.equalsIgnoreCase("kilograms");
+        } else if (fromUnit.equalsIgnoreCase("fahrenheit")) {
+            return unit.equalsIgnoreCase("celsius");
+        }
+        return false;
     }
 
     public static double feetToMeters(double feet) {
